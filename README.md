@@ -1,6 +1,11 @@
-# rebuildeq-quests
-Quests DB
+# RebuildEQ Quests
 
+## Configure lua
+
+Be sure to grab [eqemu definitions](https://github.com/xackery/eqemu-definitions)
+
+
+## Getting code from PEQ
 
 First time set up of a peq remote host
 

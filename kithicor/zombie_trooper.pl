@@ -10,10 +10,3 @@ sub EVENT_SPAWN {
 sub EVENT_TIMER {
   plugin::RandomRoam(250, 250);
 }
-
-sub EVENT_CAST_ON {
-  if (quest::istaskactive(5655) && ($spell_id = 3089)) {
-    quest::updatetaskactivity(5655, 0, 1);
-    quest::faction(420, -30); #Fallen of Bloody Kithicor
-  }
-}

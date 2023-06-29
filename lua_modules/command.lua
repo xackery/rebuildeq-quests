@@ -3,7 +3,6 @@
 local commands_path = "lua_modules/commands/";
 local commands      = { };
 
-commands["don"]       = { 80,  require(commands_path .. "don") };
 commands["endurance"] = { 50,  require(commands_path .. "endurance") };
 commands["lockouts"]  = { 0,   require(commands_path .. "lockouts") };
 commands["timeleft"]  = { 0,   require(commands_path .. "time_left") };

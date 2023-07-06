@@ -1,6 +1,6 @@
 local card = {}
 
----@param e NPC
+---@param e Mob
 ---@return table<number, number>
 function card.Inspect(e)
 

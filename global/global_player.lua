@@ -1,216 +1,33 @@
--- items: 67704, 72091, 62621, 62622, 62844, 62827, 62828, 62836, 62883, 62876, 47100, 62878, 62879
-
-function event_enter_zone(e)
-	local qglobals = eq.get_qglobals(e.self);
-	if(e.self:GetLevel() >= 15 and qglobals['Wayfarer'] == nil) then
-		local zoneid = eq.get_zone_id();
-		if(e.self:GetStartZone() ~= zoneid and (zoneid == 1 or zoneid == 2 or zoneid == 3 or zoneid == 8 or zoneid == 9
-		or zoneid == 10 or zoneid == 19 or zoneid == 22 or zoneid == 23 or zoneid == 24 or zoneid == 29 or zoneid == 30
-		or zoneid == 34 or zoneid == 35 or zoneid == 40 or zoneid == 41 or zoneid == 42 or zoneid == 45 or zoneid == 49
-		or zoneid == 52 or zoneid == 54 or zoneid == 55 or zoneid == 60 or zoneid == 61 or zoneid == 62 or zoneid == 67
-		or zoneid == 68 or zoneid == 75 or zoneid == 82 or zoneid == 106 or zoneid == 155 or zoneid == 202 or zoneid == 382
-		or zoneid == 383 or zoneid == 392 or zoneid == 393 or zoneid == 408)) then
-			e.self:Message(15,
-				"A mysterious voice whispers to you, \'If you can feel me in your thoughts, know this -- "
-				.. "something is changing in the world and I reckon you should be a part of it. I do not know much, but I do know "
-				.. "that in every home city and the wilds there are agents of an organization called the Wayfarers Brotherhood. They "
-				.. "are looking for recruits . . . If you can hear this message, you are one of the chosen. Rush to your home city, or "
-				.. "search the West Karanas and Rathe Mountains for a contact if you have been exiled from your home for your deeds, "
-				.. "and find out more. Adventure awaits you, my friend.\'");
-		end
-	end
-end
-
-function event_combine_validate(e)
-	-- e.validate_type values = { "check_zone", "check_tradeskill" }
-	-- criteria exports:
-	--	["check_zone"].         = e.zone_id
-	--	["check_tradeskill"]    = e.tradeskill_id (not active)
-	if (e.recipe_id == 10344) then
-		if (e.validate_type:find("check_zone")) then
-			if (e.zone_id ~= 289 and e.zone_id ~= 290) then
-				return 1;
-			end
-		end
-	end
-
-	return 0;
-end
-
-function event_combine_success(e)
-	if (e.recipe_id == 10904 or e.recipe_id == 10905 or e.recipe_id == 10906 or e.recipe_id == 10907) then
-		e.self:Message(1,
-		"The gem resonates with power as the shards placed within glow unlocking some of the stone's power. "
-		.. "You were successful in assembling most of the stone but there are four slots left to fill, "
-		.. "where could those four pieces be?"
-		);
-	elseif(e.recipe_id == 10903 or e.recipe_id == 10346 or e.recipe_id == 10334) then
-		local reward = { };
-		reward["melee"] =  { ["10903"] = 67665, ["10346"] = 67660, ["10334"] = 67653 };
-		reward["hybrid"] = { ["10903"] = 67666, ["10346"] = 67661, ["10334"] = 67654 };
-		reward["priest"] = { ["10903"] = 67667, ["10346"] = 67662, ["10334"] = 67655 };
-		reward["caster"] = { ["10903"] = 67668, ["10346"] = 67663, ["10334"] = 67656 };
-
-		local ctype = eq.ClassType(e.self:GetClass());
-		e.self:SummonItem(reward[ctype][tostring(e.recipe_id)]);
-		e.self:SummonItem(67704); -- Item: Vaifan's Clockwork Gemcutter Tools
-		e.self:Message(1, "Success");
-	--cleric 1.5
-	elseif(e.recipe_id == 19460) then
-		e.self:AddEXP(25000);
-		e.self:AddAAPoints(5);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 5 ability points!');
-		eq.set_global("cleric_epic","7",5,"F");
-	--rogue 1.5
-	elseif(e.recipe_id == 13402 or e.recipe_id == 13403 or e.recipe_id == 13404 or e.recipe_id == 13405) then
-		e.self:Message(15,"The piece of the metal orb fuses together with the blue diamonds under the intense heat of the forge. As it does, a flurry of images flash through your mind... A ranger and his bear side by side, stoic and unafraid, in a war-torn forest. A bitter tattooed woman with bluish skin wallowing in misery in a waterfront tavern. An endless barrage of crashing thunder and lightning illuminating a crimson brick ampitheater. Two halflings locked in a battle of wits using a checkered board. The images then fade from your mind");
-	--ranger 1.5 tree
-	elseif(e.recipe_id ==13412) then
-		eq.set_global("ranger_epic","3",5,"F");
-		if(eq.get_zone_short_name()=="jaggedpine") then
-			e.self:Message(15,"The seed grows rapidly the moment you push it beneath the soil. It appears at first as a mere shoot, but within moments grows into a stout sapling and then into a gigantic tree. The tree is one you've never seen before. It is the coloration and thick bark of a redwood with the thick bole indicative of the species. The tree is, however, far too short and has spindly branches sprouting from it with beautiful flowers that you would expect on a dogwood. You take all of this in at a glance. It takes you a moment longer to realize that the tree is moving.");
-			eq.spawn2(181222, 0, 0, e.self:GetX()+3,e.self:GetY()+3,e.self:GetZ(),0); -- NPC: Red_Dogwood_Treant
-		else
-			e.self:Message(15,"The soil conditions prohibit the seed from taking hold");
-			e.self:SummonItem(72091); -- Item: Fertile Earth
-			e.self:SummonItem(62621); -- Item: Senvial's Blessing
-			e.self:SummonItem(62622); -- Item: Grinbik's Blessing
-			e.self:SummonItem(62844); -- Item: Red Dogwood Seed
-		end
-	--ranger 1.5 final
-	elseif(e.recipe_id ==13413) then
-		e.self:AddEXP(25000);
-		e.self:AddAAPoints(5);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 5 ability points!');
-		eq.set_global("ranger_epic","5",5,"F");
-	--ranger 2.0
-	elseif(e.recipe_id ==19914 or e.recipe_id==19915) then
-		e.self:Message(15,'Very Good. Now we must attune the cage to the specific element we wish to free. You will need two items, one must protect from the element and the other must be able to absorb an incredible amount of that element. This is not a simple task. You must first discover the nature of the spirit that you wish to free and then find such items that will allow you to redirect its power. You must know that each spirit represents a specific area within their element and that is what you must focus on, not their element specifically. For example, Grinbik was an earth spirit, but his area of power was fertility. Senvial was a spirit of Water, but his power was in mist and fog.');
-		eq.set_global("ranger_epic","8",5,"F");
-	elseif(e.recipe_id ==19916) then
-		e.self:Message(15,"The Red Dogwood Treant speaks to you from within your sword. 'Well done. This should allow me to free a spirit with power over cold and ice. Now you need to find the power that binds the spirit and unleash it where that spirit is bound.'");
-	elseif(e.recipe_id ==19917) then
-		if(eq.get_zone_short_name()=="anguish") then
-			eq.spawn2(317113, 0, 0, e.self:GetX(),e.self:GetY(),e.self:GetZ(),0); -- NPC: #Oshimai_Spirit_of_the_High_Air
-		end
-	-- paladin 1.5 final
-	elseif(e.recipe_id ==19880) then
-		e.self:AddEXP(25000);
-		e.self:AddAAPoints(5);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 5 ability points!');
-		eq.set_global("paladin_epic","8",5,"F");
-		e.self:Message(6,"As the four soulstones come together, a soft blue light eminates around the dark sword. The soulstones find themselves at home within the sword. A flash occurs and four voices in unison speak in your mind, 'Thank you for saving us and giving us a purpose again. You are truly our savior and our redeemer, and we shall serve you from now on. Thank you, noble knight!")
-	--bard 1.5 final
-	elseif(e.recipe_id == 19882) then
-		e.self:AddEXP(25000);
-		e.self:AddAAPoints(5);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 5 ability points!');
-		eq.set_global("bard15","6",5,"F");
-	--druid 1.5 feerrott
-	elseif(e.recipe_id == 19888) then
-		if(eq.get_zone_short_name()=="feerrott") then
-			eq.spawn2(47209, 0, 0, e.self:GetX()+10,e.self:GetY()+10,e.self:GetZ(),0); -- NPC: corrupted_spirit
-			e.self:Message(0,"compelled spirit screams as his essences is forced back into the world of the living. 'What is this? Where am I? Who are you? What do you want from me?");
-		else
-			e.self:SummonItem(62827); -- Item: Mangled Head
-			e.self:SummonItem(62828); -- Item: Animating Heads
-			e.self:SummonItem(62836); -- Item: Soul Stone
-		end
-	-- druid 1.5 final
-	elseif(e.recipe_id ==19892) then
-		e.self:AddAAPoints(5);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 5 ability points!');
-		eq.set_global("druid_epic","8",5,"F");
-		e.self:SendMarqueeMessage(15, 510, 1, 100, 10000, "You plant the Mind Crystal and the Seed of Living Brambles in the pot. The pot grows warm and immediately you see a vine sprouting from the soil. The vine continues to grow at a tremendous rate. Brambles grow into the heart of the crystal where the core impurity is and split it. They continue to grow at an astounding speed and soon burst the pot and form the Staff of Living Brambles");
-	--druid 2.0 sub final
-	elseif(e.recipe_id ==19908) then
-		if(eq.get_zone_short_name()=="anguish") then
-			eq.spawn2(317115, 0, 0, e.self:GetX()+3,e.self:GetY()+3,e.self:GetZ(),0); -- NPC: #Yuisaha
-			e.self:SummonItem(62883); -- Item: Essence of Rainfall
-			e.self:SummonItem(62876); -- Item: Insulated Container
-		else
-			e.self:Message(15,"The rain spirit cannot be reached here");
-			e.self:SummonItem(47100); -- Item: Globe of Discordant Energy
-			e.self:SummonItem(62876); -- Item: Insulated Container
-			e.self:SummonItem(62878); -- Item: Frozen Rain Spirit
-			e.self:SummonItem(62879); -- Item: Everburning Jagged Tree Limb
-		end
-	--druid 2.0 final
-	elseif(e.recipe_id ==19909) then
-		e.self:AddEXP(50000);
-		e.self:AddAAPoints(10);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 10 ability points!');
-		eq.set_global("druid_epic","13",5,"F");
-		--e.self:SendMarqueeMessage(15, 510, 1, 100, 10000, "You plant the Mind Crystal and the Seed of Living Brambles in the pot. The pot grows warm and immediately you see a vine sprouting from the soil. The vine continues to grow at a tremendous rate. Brambles grow into the heart of the crystal where the core impurity is and split it. They continue to grow at an astounding speed and soon burst the pot and form the Staff of Living Brambles");
-	--warrior 2.0
-	elseif(e.recipe_id ==19902) then
-		e.self:AddEXP(50000);
-		e.self:AddAAPoints(10);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 10 ability points!');
-		eq.set_global("warrior_epic","21",5,"F");
-	-- CLR 2.0
-	elseif (e.recipe_id == 19893) then
-		e.self:Message(13, "Omat should probably see this.");
-	--ench 2.0
-	elseif (e.recipe_id == 19919) then
-		eq.set_global("ench_epic","9",5,"F");
-		e.self:Message(15,"Your Oculus of Persuasion gleams with a blinding light for a moment, dimming quickly to its previous understated beauty. The light has left an image burned into your mind, a strangely tattooed woman chanting by a waterfall.");
-	--ench 2.0 final
-	elseif (e.recipe_id == 19920) then
-		e.self:Message(15,"The discordant energy shoots through the staff, sending a shower of sparks through the air. The crystal shatters before you, and as the sparks fade away you notice the changes in your staff.");
-		e.self:AddEXP(50000);
-		e.self:AddAAPoints(10);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 10 ability points!');
-		eq.set_global("ench_epic","10",5,"F");
-	--pal 2.0 final
-	elseif (e.recipe_id == 19925) then
-		e.self:Message(15,"As you combine all six tokens in the scabbard with Redemption, you feel a tugging at your soul. An energy flows through you as you feel the virtues of your inner self being tugged and tempered into the weapon. For a second you feel drained, but now that feeling has subsided. A final flash of light occurs and a new sword is tempered; Nightbane, Sword of the Valiant");
-		e.self:AddEXP(50000);
-		e.self:AddAAPoints(10);
-		e.self:Ding();
-		e.self:Message(15,'You have gained 10 ability points!');
-		eq.set_global("paladin_epic","11",5,"F");
-		eq.delete_global("paladin_epic_mmcc");
-		eq.delete_global("paladin_epic_hollowc");
-	end
-end
-
 function event_command(e)
 	return eq.DispatchCommands(e);
 end
 
---[[ the main key is the ID of the AA
---   the first set is the age required in seconds
---   the second is if to ignore the age and grant anyways live test server style
---   the third is enabled
---]]
-vet_aa = {
-    [481]  = { 31536000, true, true}, -- Lesson of the Devote 1 yr
-    [482]  = { 63072000, true, true}, -- Infusion of the Faithful 2 yr
-    [483]  = { 94608000, true, true}, -- Chaotic Jester 3 yr
-    [484]  = {126144000, true, true}, -- Expedient Recovery 4 yr
-    [485]  = {157680000, true, true}, -- Steadfast Servant 5 yr
-    [486]  = {189216000, true, true}, -- Staunch Recovery 6 yr
-    [487]  = {220752000, true, true}, -- Intensity of the Resolute 7 yr
-    [511]  = {252288000, true, true}, -- Throne of Heroes 8 yr
-    [2000] = {283824000, true, true}, -- Armor of Experience 9 yr
-    [8081] = {315360000, true, true}, -- Summon Resupply Agent 10 yr
-    [8130] = {346896000, true, true}, -- Summon Clockwork Banker 11 yr
-    [453]  = {378432000, true, true}, -- Summon Permutation Peddler 12 yr
-    [182]  = {409968000, true, true}, -- Summon Personal Tribute Master 13 yr
-    [600]  = {441504000, true, true}, -- Blessing of the Devoted 14 yr
+local racials = {
+	{ ID = 1, AA = 12}, -- Human
+	{ ID = 2, AA = 5}, -- Barbarian
+	{ ID = 3, AA = 7}, -- Erudite
+	{ ID = 4, AA = 16}, -- Wood Elf
+	{ ID = 5, AA = 11}, -- High Elf
+	{ ID = 6, AA = 4}, -- Dark Elf
+	{ ID = 7, AA = 10}, -- Half Elf
+	{ ID = 8, AA = 6}, -- Dwarf
+	{ ID = 9, AA = 15}, -- Troll
+	{ ID = 10, AA = 14}, -- Ogre
+	{ ID = 11, AA = 0}, -- Halfling
+	{ ID = 12, AA = 9}, -- Gnome
+	{ ID = 128, AA = 13}, -- Iksar
+	{ ID = 130, AA = 17}, -- Vah Shir
+	{ ID = 330, AA = 8}, -- Froglok
+	{ ID = 522, AA = 18}, -- Drakkin
 }
-
+---@param e PlayerEventConnect
 function event_connect(e)
-
+	for _, v in pairs(racials) do
+		if e.self:GetRace() == v.ID then
+			e.self:GrantAlternateAdvancementAbility(v.AA, 1)
+			break
+		end
+	end
 end
 
 --[[
@@ -303,42 +120,4 @@ function event_level_up(e)
     end
 
   end
-end
-
-test_items = {
-    [1]  = {38000, 38020}, -- Warrior
-    [2] = {38168, 38188}, -- Cleric
-    [3]  = {38084, 38104}, -- Paladin
-    [4]  = {38105, 38125}, -- Ranger
-    [5]  = {38063, 38083}, -- Shadowknight
-    [6] = {38189, 38209}, -- Druid
-    [7]  = {38021, 38041}, -- Monk
-    [8]  = {38147, 38167}, -- Bard
-    [9]  = {38042, 38062}, -- Rogue
-    [10] = {38210, 38230}, -- Shaman
-    [11]  = {38294, 38314}, -- Necromancer
-    [12]  = {38231, 38251}, -- Wizard
-    [13]  = {38252, 38272}, -- Magician
-    [14]  = {38273, 38293}, -- Enchanter
-    [15]  = {38126, 38146}, -- Beastlord
-    [16]  = {38315, 38332}, -- Berserker
-}
-
-function event_test_buff(e)
-    if (e.self:GetLevel() < 25) then
-        e.self:SetLevel(25)
-        eq.scribe_spells(25,1)
-        eq.train_discs(25,1)
-        for class_id, v in pairs(test_items) do
-            if e.self:GetClass() == class_id then
-                for item_id = v[1], v[2] do
-                    e.self:SummonItem(item_id);
-                end
-            end
-        end
-    end
-end
-
-function event_task_complete(e)
-  don.on_task_complete(e.self, e.task_id)
 end

@@ -72,6 +72,38 @@ function card.Inspect(e)
     if e:GetBodyType() == BT['Plant'] then
         cards[150110] = 100 -- Plant Card
     end
+    if e:GetRace() == 209 then -- earth elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
+    if e:GetRace() == 210 then -- air elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
+    if e:GetRace() == 211 then -- water elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
+    if e:GetRace() == 212 then -- fire elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
+    if e:GetRace() == 475 then -- air elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
+    if e:GetRace() == 476 then -- earth elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
+    if e:GetRace() == 477 then -- fire elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
+    if e:GetRace() == 478 then -- water elemental (G)
+        cards[150111] = 100 -- Summoned Card
+    end
+
     if e:GetBodyType() == BT['Summoned'] then
         cards[150111] = 100 -- Summoned Card
     end

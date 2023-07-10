@@ -10,6 +10,11 @@ end
 
 ---@param e NPCEventSpawn
 function event_spawn(e)
+
+    if e.self:HasOwner() then
+        return
+    end
+
     local card = require("card")
     local cards = card.Inspect(e.self)
     for idx, weight in pairs(cards) do
